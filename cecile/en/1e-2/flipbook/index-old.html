@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cecile Flipbook</title>
+  <script src="jquery-3.6.0.min.js"></script>
+  <script src="turn.min.js"></script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ccc;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #book-container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: visible;
+    }
+
+    #flipbook {
+      width: 1800px;  /* gives breathing room beyond 2x877 */
+      height: 640px;
+      transform-origin: top left;
+      transform: scale(var(--book-scale));
+      position: relative;
+      overflow: visible;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+	#flipbook .page {
+      width: 877px;
+      height: 620px;
+      background-color: white;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center center;
+      overflow: hidden;
+      box-shadow: inset 10px 0 15px -10px rgba(0, 0, 0, 0.25),
+                  inset -10px 0 15px -10px rgba(0, 0, 0, 0.25);
+    }
+  </style>
+</head>
+<body>
+  <div id="book-container">
+    <div id="flipbook"></div>
+  </div>
+
+</body>
+<script>
+  const totalPages = 48;
+  const flipbook = document.getElementById("flipbook");
+
+  for (let i = 1; i <= totalPages; i++) {
+    const pageNum = String(i).padStart(3, '0');
+    const div = document.createElement("div");
+    div.className = "page";
+    div.style.backgroundImage = `url('png/page_${pageNum}.png')`;
+    flipbook.appendChild(div);
+  }
+
+  $(document).ready(function () {
+    $("#flipbook").turn({
+      width: 1800,
+      height: 640,
+      autoCenter: true,
+      display: 'double'
+    });
+
+    resizeFlipbook();  // <-- initial scale
+  });
+
+  function resizeFlipbook() {
+    const scaleX = window.innerWidth / 1800;
+    const scaleY = window.innerHeight / 640;
+    const scale = Math.min(scaleX, scaleY);
+    document.documentElement.style.setProperty('--book-scale', scale);
+
+    // Let the transform settle, then force a Turn.js realignment
+    setTimeout(() => {
+      if ($("#flipbook").data("turn")) {
+        $("#flipbook").turn("resize");
+      }
+    }, 300);
+  }
+
+  window.addEventListener('resize', resizeFlipbook);
+</script>
+</html>
