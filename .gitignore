@@ -1,0 +1,19 @@
+# System clutter
+*.DS_Store
+
+# bkme temporary or intermediate files
+__pycache__/
+*.pyc
+*.log
+
+# Hidden config or thumbnail caches (often Mac or IDE-related)
+.idea/
+.vscode/
+Thumbs.db
+
+# Photos.app detritus
+**/.Spotlight-V100/
+**/.fseventsd/
+**/.TemporaryItems/
+**/.apdisk
+**/.com.apple.timemachine.supported
